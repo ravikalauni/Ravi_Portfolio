@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile | Ravi's Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .profile-page {
+      padding: 20px 4%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .profile-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .profile-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+    
+    .profile-sidebar {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .profile-main {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .profile-img-large {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin: 0 auto 20px;
+      display: block;
+    }
+    
+    .profile-name {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .profile-title {
+      text-align: center;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+    
+    .contact-info {
+      margin-top: 30px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    
+    .contact-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .section {
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #00ffee;
+      border-bottom: 2px solid rgba(0, 255, 238, 0.3);
+      padding-bottom: 5px;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .skill-category h4 {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .skill-tag {
+      background: rgba(0, 255, 238, 0.2);
+      color: #00ffee;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(0, 255, 238, 0.3);
+    }
+    
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #00ffee;
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 25px;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -38px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ffee;
+    }
+    
+    .timeline-date {
+      font-size: 0.9rem;
+      color: #00ffee;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    
+    .back-button {
+      display: inline-block;
+      margin: 30px 0;
+      padding: 12px 25px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+      .profile-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-img-large {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ravi</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="documents.html">Documents</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="#" class="active">Profile</a></li>
+      <li><a href="gudiya.html">Gudiya</a></li>
+      <li class="dropdown">
+        <a href="contact.html">Message <i class="fa-solid fa-angle-down"></i></a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="profile-page">
+    <div class="profile-header">
+      <h1>My Profile</h1>
+      <p>Background, skills, education, and professional experience</p>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+
+    <div class="profile-content">
+      <div class="profile-sidebar">
+        <img src="images/photo.jpg" alt="Ravi" class="profile-img-large">
+        <h2 class="profile-name">Ravi Prasad Kalauni</h2>
+        <p class="profile-title">BCA Student </p>
+        
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span>ravikalauni04@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>+977 9767456643</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Mahendranagar, Nepal</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-brands fa-github"></i>
+            <span>github.com/ravi</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-brands fa-linkedin"></i>
+            <span>linkedin.com/in/ravi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-main">
+        <div class="section">
+          <h3 class="section-title">About Me</h3>
+          <p>
+            I'm a third-year BCA student at Brixton College, Mahendranagar, Nepal, with a wide range of interests and skills. 
+            Currently, I'm dedicating myself to mastering DSA and coding to strengthen my problem-solving and development foundation.
+          </p>
+          <p>
+            Passionate about technology and innovation, I enjoy creating solutions that make a difference. 
+            When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or learning about cloud computing.
+          </p>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Skills</h3>
+          <div class="skills-grid">
+            <div class="skill-category">
+              <h4>Programming</h4>
+              <div class="skill-list">
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">C++</span>
+                 <span class="skill-tag">C</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <h4>Web Development</h4>
+              <div class="skill-list">
+                <span class="skill-tag">HTML/CSS</span>
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">MongoDB</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <h4>Tools & Technologies</h4>
+              <div class="skill-list">
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">AWS</span>
+                <span class="skill-tag">Firebase</span>
+                <span class="skill-tag">Figma</span>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h4>Video Editing Tools</h4>
+              <div class="skill-list">
+                <span class="skill-tag">Adobe Premiere Pro</span>
+                <span class="skill-tag">Adobe After effects</span>
+                <span class="skill-tag">DaVinci Resolve</span>
+                <span class="skill-tag">Capcut</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <h4>Graphics Design Tools</h4>
+              <div class="skill-list">
+                <span class="skill-tag">Adobe Photoshop</span>
+                <span class="skill-tag">Adobe Illustrator</span>
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">Canva</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <h4>AI Tools</h4>
+              <div class="skill-list">
+                <span class="skill-tag">ChatGPT</span>
+                <span class="skill-tag">Replit</span>
+                <span class="skill-tag">Google Gemini</span>
+                <span class="skill-tag">Microsoft Copilot</span>
+                <span class="skill-tag">Claude AI</span>
+                <span class="skill-tag">Perplexity AI</span>
+                <span class="skill-tag">DeepSeek</span>
+                <span class="skill-tag">Meta AI</span>
+                <span class="skill-tag">Midjourney</span>
+                <span class="skill-tag">DALL-E 3</span>
+                <span class="skill-tag">Leonardo AI</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Education</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">2024 - Present</div>
+              <h4>Bachelor of Computer Applications (BCA)</h4>
+              <p>Brixton College, Mahendranagar, Nepal</p>
+              <p>Currently in third Semester, focusing on software development and computer science fundamentals.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">2021 - 2023</div>
+              <h4>+2 Management (Computer Science)</h4>
+              <p>Morning Glory Secondary Education</p>
+              <p>Completed with focus on computer science and Accounting.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Interests</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Web Development</span>
+            <span class="skill-tag">Cloud Computing</span>
+            <span class="skill-tag">Open Source</span>
+            <span class="skill-tag">UI/UX Design</span>
+            <span class="skill-tag">Mobile Development</span>
+            <span class="skill-tag">Data Structures</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+  </div>
+
+  <script>
+    // Mouse trail effect
+    document.addEventListener('mousemove', (e) => {
+      const trail = document.createElement('div');
+      trail.classList.add('trail');
+      document.body.appendChild(trail);
+
+      trail.style.left = e.pageX + 'px';
+      trail.style.top = e.pageY + 'px';
+
+      setTimeout(() => {
+        trail.remove();
+      }, 600);
+    });
+  </script>
+</body>
+</html>

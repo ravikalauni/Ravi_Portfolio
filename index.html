@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Ravi | Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ravi</div>
+    <ul class="nav-links">
+      <li><a href="#" class="active" data-tab="home">Home</a></li>
+      <li><a href="#" data-tab="documents">Documents</a></li>
+      <li><a href="#" data-tab="projects">Projects</a></li>
+      <li><a href="#" data-tab="profile">Profile</a></li>
+      <li><a href="#" data-tab="gudiya">Gudiya</a></li>
+      <li class="dropdown">
+        <a href="#" data-tab="message">Message <i class="fa-solid fa-angle-down"></i></a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Modal Popups -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal Title</h3>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-content">
+        <p id="modalText">This is the modal content.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="modalContinue" class="btn-continue">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="socials">
+    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+    <a href="#"><i class="fa-brands fa-discord"></i></a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="quote">
+      <h2 id="typing" class="quote"></h2>
+      <p><i>"Karmanye vadhikaraste ma phaleshu kadachana"</i><br>- Bhagavad Gita</p>
+    </div>
+
+    <div class="portfolio-box">
+      <h3><i class="fa-solid fa-briefcase"></i> Portfolio</h3>
+      <div class="buttons">
+        <a href="https://drive.google.com/drive/folders/1cvC4P3qaBi7T_ZjCWHv-DeV_-t2Bg_P9?usp=drive_link" target="_blank" class="btn"><i class="fa-brands fa-google-drive"></i> Drive</a>
+        <a href="projects.html" class="btn"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+        <a href="profile.html" class="btn"><i class="fa-solid fa-file-lines"></i> CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about">
+    <div class="about-content">
+      <div class="profile-container">
+        <img src="images/photo.jpg" class="profile-img" alt="Ravi">
+        <div class="color-circles">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+          <div class="circle circle-3"></div>
+          <div class="circle circle-4"></div>
+        </div>
+      </div>
+      <div class="about-text">
+        <p>I'm a third-year BCA student at Brixton College, Mahendranagar, Nepal, with a wide range of interests and skills. Currently, I'm dedicating myself to mastering DSA and coding to strengthen my problem-solving and development foundation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects & Videos -->
+  <section class="cards">
+    <div class="card">
+      <i class="fa-solid fa-lightbulb icon"></i>
+      <h4>Projects</h4>
+      <a href="projects.html" class="btn-view">View</a>
+    </div>
+    <div class="card">
+      <i class="fa-solid fa-video icon"></i>
+      <h4>Videos</h4>
+      <a href="https://drive.google.com/drive/folders/1cvC4P3qaBi7T_ZjCWHv-DeV_-t2Bg_P9?usp=drive_link" class="btn-view">View</a>
+    </div>
+  </section>
+
+  <!-- Documents -->
+  <section class="documents">
+    <div class="doc-header">
+      <h3>Documents</h3>
+      <p class="doc-subtitle">Personal Diary</p>
+    </div>
+    <div class="doc-list" id="docList">
+      <p>2 Jan: I participated in AWS Cloud Innovation Day, Farwest</p>
+      <p>1 Jan: Why it is being too much</p>
+      <p>11 Dec: What I feel in this protest</p>
+      <p>8 Dec: My latest project finished</p>
+      <p>7 Dec: They said NO.</p>
+    </div>
+    <button id="viewMoreBtn" class="btn-view">View more</button>
+    <div class="heart">
+      <i id="heartIcon" class="fa-regular fa-heart"></i>
+      <p id="heartText">Let me know someone visited 💜</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="contact">
+      <h4>Website made using HTML, CSS and JS</h4>
+      <p>Source code: <a href="">GitHub</a></p>
+    </div>
+    <p class="thanks">Thanks for being here!</p>
+    <p class="copy">© Copyright, All Rights Reserved</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documents | Ravi's Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+
+
+.trail {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  background: rgb(255, 255, 255);
+  pointer-events: none;
+  opacity: 0.9;
+  filter: blur(1px) brightness(1.9);
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8);
+  animation: fadeOut 0.9s linear forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+    .documents-page {
+      padding: 20px 4%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .documents-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .documents-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .document-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s;
+    }
+    
+    .document-item:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .document-date {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 10px;
+      color: #00ffee;
+    }
+    
+    .document-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .document-content {
+      line-height: 1.6;
+      opacity: 0.9;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .document-content.collapsed {
+      max-height: 4.8em; /* Show approximately 3 lines (1.6 line-height * 3) */
+    }
+    
+    .document-content.expanded {
+      max-height: none;
+    }
+    
+    .see-more-btn {
+      background: transparent;
+      border: none;
+      color: #00ffee;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 5px 0;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    
+    .see-more-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .back-button {
+      display: inline-block;
+      margin: 30px 0;
+      padding: 12px 25px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ravi</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#" class="active">Documents</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="gudiya.html">Gudiya</a></li>
+      <li class="dropdown">
+        <a href="contact.html">Message <i class="fa-solid fa-angle-down"></i></a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="documents-page">
+    <div class="documents-header">
+      <h1>My Documents & Diary</h1>
+      <p>Personal thoughts, achievements, and memories</p>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+
+    <div class="documents-list" id="documentsList">
+      <div class="loading">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading documents...
+      </div>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+  </div>
+
+  <script>
+    // Google Apps Script URL - Replace with your deployed web app URL
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgEj8ROMjWASHC91upU8P9TlihrDezDCfVPWrqm8ZqcZ0v8hBrAa6zc-Hi8p9KasfA/exec';
+
+    // Function to toggle content visibility
+    function toggleContent(button) {
+      const content = button.previousElementSibling;
+      const isCollapsed = content.classList.contains('collapsed');
+      
+      if (isCollapsed) {
+        content.classList.remove('collapsed');
+        content.classList.add('expanded');
+        button.textContent = 'See less...';
+      } else {
+        content.classList.remove('expanded');
+        content.classList.add('collapsed');
+        button.textContent = 'See more...';
+      }
+    }
+
+    // Check if content needs a "See more" button
+    function needsSeeMore(contentElement, contentText) {
+      // Create a temporary element to measure text height
+      const tempElement = document.createElement('div');
+      tempElement.style.cssText = `
+        position: absolute;
+        visibility: hidden;
+        width: ${contentElement.offsetWidth}px;
+        font: inherit;
+        line-height: 1.6;
+      `;
+      tempElement.textContent = contentText;
+      document.body.appendChild(tempElement);
+      
+      const needsButton = tempElement.offsetHeight > 4.8 * 16; // 4.8em in pixels (assuming 1em = 16px)
+      document.body.removeChild(tempElement);
+      
+      return needsButton;
+    }
+
+    // Fetch and display all documents
+    async function loadAllDocuments() {
+      try {
+        const response = await fetch(APPS_SCRIPT_URL);
+        const result = await response.json();
+        
+        const documentsList = document.getElementById('documentsList');
+        documentsList.innerHTML = '';
+        
+        console.log('Documents API Response:', result); // For debugging
+        
+        if (result.success && result.data && result.data.length > 0) {
+          result.data.forEach(doc => {
+            const documentItem = document.createElement('div');
+            documentItem.className = 'document-item';
+            
+            const content = doc.description || doc.title || 'No content available';
+            
+            documentItem.innerHTML = `
+              <div class="document-date">${doc.date || 'No date'}</div>
+              <div class="document-title">${doc.title || 'No title'}</div>
+              <div class="document-content collapsed">${content}</div>
+            `;
+            
+            documentsList.appendChild(documentItem);
+            
+            // Add "See more" button if needed
+            const contentElement = documentItem.querySelector('.document-content');
+            
+            // Use setTimeout to ensure DOM is rendered before checking height
+            setTimeout(() => {
+              if (needsSeeMore(contentElement, content)) {
+                const seeMoreBtn = document.createElement('button');
+                seeMoreBtn.className = 'see-more-btn';
+                seeMoreBtn.textContent = 'See more...';
+                seeMoreBtn.onclick = () => toggleContent(seeMoreBtn);
+                documentItem.appendChild(seeMoreBtn);
+              } else {
+                contentElement.classList.remove('collapsed');
+              }
+            }, 0);
+          });
+        } else {
+          documentsList.innerHTML = '<div class="loading">No documents found in the database.</div>';
+        }
+      } catch (error) {
+        console.error('Error loading documents:', error);
+        document.getElementById('documentsList').innerHTML = 
+          '<div class="loading">Error loading documents. Please check console for details.</div>';
+      }
+    }
+
+    // Load documents when page loads
+    document.addEventListener('DOMContentLoaded', loadAllDocuments);
+
+    // for Mouse Pointer
+document.addEventListener('mousemove', (e) => {
+  const trail = document.createElement('div');
+  trail.classList.add('trail');
+  document.body.appendChild(trail);
+
+  trail.style.left = e.pageX + 'px';
+  trail.style.top = e.pageY + 'px';
+
+  setTimeout(() => {
+    trail.remove();
+  }, 600);
+});
+  </script>
+</body>
+</html>

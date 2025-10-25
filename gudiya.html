@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gudiya | Ravi's Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .gudiya-page {
+      padding: 20px 4%;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .gudiya-header {
+      margin-bottom: 40px;
+    }
+    
+    .special-message {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 40px;
+      margin: 40px 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .special-message::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 77, 166, 0.1), transparent);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+    
+    .heart-icon {
+      font-size: 3rem;
+      color: #ff4da6;
+      margin-bottom: 20px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .memories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+    
+    .memory-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .memory-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .memory-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #ff4da6;
+    }
+    
+    .memory-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+    
+    .memory-description {
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+    
+    .back-button {
+      display: inline-block;
+      margin: 30px 0;
+      padding: 12px 25px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    .secret-code {
+      margin-top: 50px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+    
+    .secret-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 10px 15px;
+      color: #fff;
+      margin: 10px;
+      width: 200px;
+    }
+    
+    .secret-btn {
+      background: rgba(255, 77, 166, 0.3);
+      border: 1px solid rgba(255, 77, 166, 0.5);
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .secret-btn:hover {
+      background: rgba(255, 77, 166, 0.5);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ravi</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="documents.html">Documents</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="#" class="active">Gudiya</a></li>
+      <li class="dropdown">
+        <a href="contact.html">Message <i class="fa-solid fa-angle-down"></i></a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="gudiya-page">
+    <div class="gudiya-header">
+      <h1>Gudiya</h1>
+      <p>A special place for cherished memories</p>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+
+    <div class="special-message">
+      <div class="heart-icon">
+        <i class="fa-solid fa-ban"></i>
+      </div>
+      <h2>It is not accessible for you!</h2>
+      <p>
+       This page is strictly protected by the admin to ensure privacy. To gain access, you must obtain a 6-digit code from the admin. Once you have the code, enter it in the field at the bottom of this page to unlock the content.
+      </p>
+    </div>
+
+    <div class="memories-grid">
+      <div class="memory-card">
+        <div class="memory-icon">
+          <i class="fa-solid fa-1"></i>
+        </div>
+        <h3 class="memory-title">Contact the Admin</h3>
+        <p class="memory-description">
+          First, contact the admin using the Message tab in the Navigation Bar. Next, fill out your details in the second panel (e.g., name, email, subject, and message). You will receive an email within 24 hours containing a unique 6-digit code.
+        </p>
+      </div>
+
+      <div class="memory-card">
+        <div class="memory-icon">
+          <i class="fa-solid fa-2"></i>
+        </div>
+        <h3 class="memory-title">Enter the 6-digit code</h3>
+        <p class="memory-description">
+          Enter the code you received in the field at the bottom of this page and click the "Unlock" button to access the content.
+        </p>
+      </div>
+
+      <div class="memory-card">
+        <div class="memory-icon">
+          <i class="fa-solid fa-3"></i>
+        </div>
+        <h3 class="memory-title">You will get accessed</h3>
+        <p class="memory-description">
+          After clicking the "Unlock" button, you’ll be able to access the content of this page. It might take a little patience, so if you’re serious about it, hang tight—it’s worth the wait.
+        </p>
+      </div>
+    </div>
+
+    <div class="secret-code">
+      <h3>Special Access</h3>
+      <p>Enter the special 6-digit code to get access:</p>
+      <input type="password" class="secret-input" placeholder="Enter code..." id="secretCode">
+      <button class="secret-btn" onclick="checkSecretCode()">Unlock</button>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+  </div>
+
+  <script>
+    // Mouse trail effect
+    document.addEventListener('mousemove', (e) => {
+      const trail = document.createElement('div');
+      trail.classList.add('trail');
+      document.body.appendChild(trail);
+
+      trail.style.left = e.pageX + 'px';
+      trail.style.top = e.pageY + 'px';
+
+      setTimeout(() => {
+        trail.remove();
+      }, 600);
+    });
+
+    // Secret code functionality
+    function checkSecretCode() {
+      const code = document.getElementById('secretCode').value;
+      const secretCodes = ['gudiya', 'love', 'forever', 'special'];
+      
+      if (secretCodes.includes(code.toLowerCase())) {
+        alert('Access Granted! 💖\nMore beautiful memories unlocked...');
+        document.getElementById('secretCode').value = '';
+      } else {
+        alert('Try again with our special words 💕');
+      }
+    }
+
+    // Enter key support for secret code
+    document.getElementById('secretCode').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkSecretCode();
+      }
+    });
+  </script>
+</body>
+</html>

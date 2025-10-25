@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Ravi's Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .projects-page {
+      padding: 20px 4%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .projects-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+    
+    .project-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .project-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .project-card:hover::before {
+      left: 100%;
+    }
+    
+    .project-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #00ffee;
+    }
+    
+    .project-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+    
+    .project-description {
+      line-height: 1.6;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+    
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .tech-tag {
+      background: rgba(0, 255, 238, 0.2);
+      color: #00ffee;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(0, 255, 238, 0.3);
+    }
+    
+    .project-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .project-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+    
+    .project-link:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    .back-button {
+      display: inline-block;
+      margin: 30px 0;
+      padding: 12px 25px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    .coming-soon {
+      text-align: center;
+      padding: 60px 20px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ravi</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="documents.html">Documents</a></li>
+      <li><a href="#" class="active">Projects</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="gudiya.html">Gudiya</a></li>
+      <li class="dropdown">
+        <a href="contact.html">Message <i class="fa-solid fa-angle-down"></i></a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="projects-page">
+    <div class="projects-header">
+      <h1>My Projects</h1>
+      <p>Web development, software engineering, and technical projects</p>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+
+    <div class="projects-grid">
+      <!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-icon">
+          <i class="fa-solid fa-laptop-code"></i>
+        </div>
+        <h3 class="project-title">Portfolio Website</h3>
+        <p class="project-description">
+          A responsive portfolio website built with HTML, CSS, and JavaScript. Features modern design with interactive elements and smooth animations.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">HTML</span>
+          <span class="tech-tag">CSS</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">Responsive</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="project-link">
+            <i class="fa-brands fa-github"></i> Code
+          </a>
+          <a href="#" class="project-link">
+            <i class="fa-solid fa-external-link"></i> Live
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card">
+        <div class="project-icon">
+          <i class="fa-solid fa-cloud"></i>
+        </div>
+        <h3 class="project-title">Cloud Storage Manager</h3>
+        <p class="project-description">
+          A web application for managing cloud storage across multiple providers with real-time synchronization and file preview capabilities.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">MongoDB</span>
+          <span class="tech-tag">AWS</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="project-link">
+            <i class="fa-brands fa-github"></i> Code
+          </a>
+          <a href="#" class="project-link">
+            <i class="fa-solid fa-external-link"></i> Demo
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card">
+        <div class="project-icon">
+          <i class="fa-solid fa-mobile-screen"></i>
+        </div>
+        <h3 class="project-title">Task Management App</h3>
+        <p class="project-description">
+          A cross-platform mobile application for task management with features like reminders, categories, and progress tracking.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">Firebase</span>
+          <span class="tech-tag">Redux</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="project-link">
+            <i class="fa-brands fa-github"></i> Code
+          </a>
+          <a href="#" class="project-link">
+            <i class="fa-brands fa-google-play"></i> Play Store
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="coming-soon">
+      <h3>More Projects Coming Soon...</h3>
+      <p>I'm constantly working on new projects and learning new technologies.</p>
+    </div>
+
+    <a href="index.html" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+  </div>
+
+  <script>
+    // Mouse trail effect
+    document.addEventListener('mousemove', (e) => {
+      const trail = document.createElement('div');
+      trail.classList.add('trail');
+      document.body.appendChild(trail);
+
+      trail.style.left = e.pageX + 'px';
+      trail.style.top = e.pageY + 'px';
+
+      setTimeout(() => {
+        trail.remove();
+      }, 600);
+    });
+  </script>
+</body>
+</html>
