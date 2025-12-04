@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Weather Scanner</title>
+    <style>
+        body {
+            font-family: poppins;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(to right, #ffffff, #ffffff);
+            color: rgb(0, 0, 0);
+        }
+
+        input,
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .progress-container {
+            width: 40%;
+            background-color: #ddd;
+            margin: 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 25px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #3498db;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.2s ease;
+        }
+
+        .step {
+            font-size: 16px;
+            color: #000000;
+            margin-top: 10px;
+            min-height: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #2c3e50;
+            font-family: Arial, Helvetica, sans-serif;
+            color: rgb(0, 0, 0)
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Real-Time Weather Scanner</h1>
+    <p>Enter your location for real-time weather scan:</p>
+    <input type="text" id="location" placeholder="Type your location">
+    <button onclick="checkWeather()">Scan Weather</button>
+
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar">0%</div>
+    </div>
+
+    <div class="step" id="step"></div>
+    <div class="result" id="result"></div>
+
+    <script>
+        function checkWeather() {
+            const location = document.getElementById('location').value.trim();
+            if (!location) {
+                alert("Please enter a location!");
+                return;
+            }
+
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const step = document.getElementById('step');
+            const result = document.getElementById('result');
+
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            step.textContent = '';
+            result.textContent = '';
+
+            const fakeSteps = [
+                `Initializing weather service API...`,
+                `Fetching satellite data for ${location}...`,
+                `Analyzing atmospheric pressure and humidity...`,
+                `Calling third-party cloud intelligence module...`,
+                `Cross-referencing local sensor grid...`,
+                `Compiling real-time data packets...`,
+                `Encrypting results for secure transmission...`,
+                `Finalizing output for user interface...`
+            ];
+
+            let progress = 0;
+            let stepIndex = 0;
+
+            function updateProgress() {
+                // Increase progress by a small random amount to simulate uneven loading
+                let increment = Math.random() * 2; // 0–2%
+                if (progress > 95) increment = Math.random() * 0.5; // slow near end
+                progress += increment;
+                if (progress > 100) progress = 100;
+
+                // Update step message when progress reaches a certain threshold
+                const stepThreshold = (stepIndex + 1) * (100 / fakeSteps.length);
+                if (progress >= stepThreshold && stepIndex < fakeSteps.length) {
+                    step.textContent = fakeSteps[stepIndex];
+                    stepIndex++;
+                }
+
+                progressBar.style.width = progress + '%';
+                progressBar.textContent = Math.floor(progress) + '%';
+
+                if (progress < 100) {
+                    setTimeout(updateProgress, 200 + Math.random() * 300); // random delay 0.2–0.5s
+                } else {
+                    step.textContent = '';
+                    result.textContent = `Real-time weather check successfull. Please look outside of your window`;
+                }
+            }
+
+            updateProgress();
+        }
+    </script>
+
+</body>
+
+</html>
