@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Ad Service by optidot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-content">
+                <div class="logo">
+                <img src="images/logo.png" alt="" class="logo-opti">
+            </div>
+                
+                <!-- Desktop Menu -->
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="portfolio.html" class="nav-link">Portfolio</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-button">Contact us</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="index.html" class="mobile-nav-link">Home</a>
+                <a href="services.html" class="mobile-nav-link">Services</a>
+                <a href="portfolio.html" class="mobile-nav-link">Portfolio</a>
+                <a href="about.html" class="mobile-nav-link">About</a>
+                <a href="contact.html" class="mobile-nav-button">Contact us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Particle Background -->
+    <div class="particle-background">
+        <div class="particle-pattern"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content" style="grid-template-columns: 1fr; text-align: center;">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Video Ad <span class="text-orange"></span>
+                    </h1>
+                    <p class="hero-subtitle">
+                      We create impactful video ads with powerful storytelling and clean, professional editing — designed to leave a lasting impression.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div class="buttons-service">
+                <h1>Let's chat</h1>
+                <button class="btn-service" onclick="sendEmail()">
+                   Auto email
+                </button>
+                <button class="btn-service" onclick="makeCall()">
+                    Phone call
+                </button>
+                <div id="message"></div>
+
+                <button class="btn-service" onclick="openWhatsApp()">
+                    WhatsApp
+                </button>
+                <a href="contact.html">
+                <button class="btn-service">
+                    Drop your project description here
+                </button>
+                </a>
+            </div>
+<br><br>
+            <div class="about-service">
+                <h1 class="about-heading">Is video advertising really impactful?</h1>
+                <p class="about-description">
+                Yes, video advertising is incredibly impactful in today’s digital era. Videos have the power to grab attention, deliver emotions, and communicate messages faster than any other medium. When people scroll through social media or watch content online, videos naturally stand out because they combine motion, visuals, sound, and storytelling all in one. Studies show that users are more likely to remember a brand after watching a video compared to reading a post or seeing a static image. A well-crafted video ad not only entertains but also informs, inspires, and influences the viewer’s decision-making process. That’s why brands — from global companies to local startups — are using video as their primary marketing tool.
+                </p><br>
+                <h1 class="about-heading">Why is video better than radio or newspaper ads?</h1>
+                <p class="about-description">
+               While radio and newspaper ads were once effective, they have certain limitations in today’s fast-moving, visual-first world. Radio is purely audio — meaning no visuals, no on-screen branding, and no chance for viewers to see your product or service in action. Newspapers, on the other hand, are static and quickly forgotten. In contrast, video combines both sound and visuals, which makes it more engaging and memorable. Viewers can see your product, hear your story, and feel your message — all within a few seconds. Plus, video ads can be shared on social media, embedded on websites, sent through messages, or even run as ads across platforms like Facebook, Instagram, TikTok, and YouTube. They’re not just ads — they become assets for your digital growth. That’s something traditional media just can’t compete with anymore.
+
+
+                </p><br>
+                <h1 class="about-heading">How does video capture viewers’ attention?</h1>
+                <p class="about-description">
+                Video captures attention through movement, sound, and story. Humans are naturally drawn to motion — it’s why we stop scrolling when a video auto-plays. Combine that with music, a relatable voiceover, or a catchy line at the start, and boom — you’ve got their attention. Then comes storytelling. A good video doesn’t just show a product — it tells a story. It might solve a problem, make someone laugh, pull on emotions, or create curiosity. That’s what hooks people in. High-quality visuals, smooth transitions, subtitles, and brand colors also make the content feel polished and professional. When all these elements work together, the viewer stays longer, understands more, and remembers better — which is the ultimate goal of any ad.
+                </p>
+                <br>
+                <h1 class="about-heading">How much detail is necessary in a video ad?</h1>
+                <p class="about-description">
+                The amount of detail depends on the goal and the platform. If it’s a short ad for social media, keeping it between 15 to 30 seconds with only the most important message is ideal. Focus on one strong point: what problem your product solves or why someone should care. If it’s for YouTube or a brand intro video, then 1 to 2 minutes of storytelling, explanation, and visuals can work well. The key is balance — don’t overload the viewer with too much information. Show, don’t just tell. Keep the visuals clear, the message focused, and the ending strong with a proper call-to-action (CTA) like "Visit now," "Order today," or "Message us to know more." In short, enough detail to inform, but not so much that it feels boring or heavy.
+                </p>
+
+
+                
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-opti">Opti</span>Dot<span class="logo-dot">.</span>
+                    </div>
+                    <p class="footer-text">
+                        We are OptiDot - a team of passionate creators, dreamers, and doers who understand that great digital experiences are built with passion, creativity, and a deep understanding of what clicks with today's audience.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Social Links</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61578073376194" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="https://www.linkedin.com/company/optidot/?viewAsMember=true" class="social-link">LinkedIn</a>
+                        <a href="https://www.tiktok.com/@optidot" class="social-link">TikTok</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact Info</h3>
+                    <div class="contact-info">
+                        <p>Email: optidotdigital@gmail.com</p>
+                        <p>Location: Mahendranagar, Kanchanpur</p>
+                        <p>Phone: 9767457243, 9767463881</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Newsletter</h3>
+                    <p class="newsletter-text">Subscribe for updates and tips</p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter email" required>
+                        <button type="submit">→</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 OptiDot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</body>
+</html>
