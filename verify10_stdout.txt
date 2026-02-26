@@ -1,0 +1,16 @@
+Default admin user created
+Seeded matching data for hero_section
+Seeded matching data for about_section
+Seeded matching data for projects_section
+Seeded matching data for contact_section
+Seeded matching data for footer_section
+Seeded matching data for settings
+Database initialized successfully
+[2m7:49:26 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+Server running at http://localhost:3000
+[2m7:50:41 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mserver.mjs[22m
+[2m7:50:41 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mverify10_stdout.txt[22m
+[2m7:53:03 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mserver.ts[22m
+[2m7:53:03 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mverify10_stdout.txt[22m
+[2m7:53:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mserver.mjs[22m
+[2m7:53:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mverify10_stdout.txt[22m

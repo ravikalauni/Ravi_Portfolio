@@ -1,0 +1,8 @@
+Default admin user created
+Seeded matching data for hero_section
+Seeded matching data for about_section
+Seeded matching data for projects_section
+Seeded matching data for contact_section
+Seeded matching data for footer_section
+Seeded matching data for settings
+Database initialized successfully
