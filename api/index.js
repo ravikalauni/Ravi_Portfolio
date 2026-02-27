@@ -367,7 +367,8 @@ app.get('/api/documents', async (req, res) => {
                     const { data: comments } = await supabase
                         .from('document_comments')
                         .select('*')
-                        .eq('document_id', doc.id);
+                        .eq('document_id', doc.id)
+                        .order('created_at', { ascending: true });
                     return { ...doc, comments: comments || [] };
                 } catch (e) {
                     return { ...doc, comments: [] };
@@ -479,11 +480,11 @@ app.get('/api/messages', async (req, res) => {
 
 app.post('/api/messages', async (req, res) => {
     try {
-        const { id, name, email, message, date } = req.body;
+        const { id, name, email, message } = req.body;
 
         const { error } = await supabase
             .from('messages')
-            .insert([{ id, name, email, message, date, read: false }]);
+            .insert([{ id, name, email, message, read: false }]);
 
         if (error) throw error;
         res.status(201).json({ success: true });
