@@ -1,3 +1,7 @@
+const API_BASE_URL = import.meta.env.PROD
+  ? '/api'  // In production, use relative path
+  : 'http://localhost:5000/api';
+
 import React, { useState, useEffect } from 'react';
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
@@ -18,8 +22,6 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [currentView, setCurrentView] = useState<'portfolio' | 'documents'>('portfolio');
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
-
-  // ===== ADD THIS LINE =====
   const [isMouseTailEnabled, setIsMouseTailEnabled] = useState(true);
 
   const [documentsData, setDocumentsData] = useState<Array<any>>([]);
@@ -38,20 +40,23 @@ export default function App() {
   }, []);
 
   const fetchAllData = async () => {
-    fetchDocuments();
-    fetchMessages();
-    fetchHero();
-    fetchAbout();
-    fetchSkills();
-    fetchProjects();
-    fetchSettings();
-    fetchContact();
-    fetchFooter();
+    await Promise.allSettled([
+      fetchDocuments(),
+      fetchMessages(),
+      fetchHero(),
+      fetchAbout(),
+      fetchSkills(),
+      fetchProjects(),
+      fetchSettings(),
+      fetchContact(),
+      fetchFooter()
+    ]);
   };
 
   const fetchDocuments = async () => {
     try {
-      const res = await fetch('/api/documents');
+      const res = await fetch(`${API_BASE_URL}/documents`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       setDocumentsData(data);
     } catch (err) {
@@ -61,7 +66,8 @@ export default function App() {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch('/api/messages');
+      const res = await fetch(`${API_BASE_URL}/messages`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       setMessages(data);
     } catch (err) {
@@ -71,7 +77,8 @@ export default function App() {
 
   const fetchHero = async () => {
     try {
-      const res = await fetch('/api/hero');
+      const res = await fetch(`${API_BASE_URL}/hero`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data) setHeroData(data);
     } catch (err) {
@@ -81,7 +88,8 @@ export default function App() {
 
   const fetchAbout = async () => {
     try {
-      const res = await fetch('/api/about');
+      const res = await fetch(`${API_BASE_URL}/about`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data) setAboutData(data);
     } catch (err) {
@@ -91,7 +99,8 @@ export default function App() {
 
   const fetchSkills = async () => {
     try {
-      const res = await fetch('/api/skills');
+      const res = await fetch(`${API_BASE_URL}/skills`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       setSkillsData(data);
     } catch (err) {
@@ -101,7 +110,8 @@ export default function App() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch('/api/projects');
+      const res = await fetch(`${API_BASE_URL}/projects`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data) setProjectsData(data);
     } catch (err) {
@@ -111,7 +121,8 @@ export default function App() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
+      const res = await fetch(`${API_BASE_URL}/settings`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data) setSettingsData(data);
     } catch (err) {
@@ -121,7 +132,8 @@ export default function App() {
 
   const fetchContact = async () => {
     try {
-      const res = await fetch('/api/contact');
+      const res = await fetch(`${API_BASE_URL}/contact`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data) setContactData(data);
     } catch (err) {
@@ -131,7 +143,8 @@ export default function App() {
 
   const fetchFooter = async () => {
     try {
-      const res = await fetch('/api/footer');
+      const res = await fetch(`${API_BASE_URL}/footer`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data) setFooterData(data);
     } catch (err) {
@@ -141,7 +154,11 @@ export default function App() {
 
   const handleUpdateSection = async (endpoint: string, data: any, refreshFn: () => void) => {
     try {
-      await fetch(endpoint, {
+      const fullEndpoint = endpoint.startsWith('/api')
+        ? `${API_BASE_URL}${endpoint.replace('/api', '')}`
+        : `${API_BASE_URL}${endpoint}`;
+
+      await fetch(fullEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -163,14 +180,10 @@ export default function App() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // CTRL + L for login
       if (e.ctrlKey && e.key.toLowerCase() === 'l') {
         e.preventDefault();
         setShowLogin(true);
       }
-
-      // ===== ADD THIS KEYBOARD SHORTCUT =====
-      // CTRL + M to toggle mouse trail
       if (e.ctrlKey && e.key.toLowerCase() === 'm') {
         e.preventDefault();
         setIsMouseTailEnabled(prev => !prev);
@@ -180,7 +193,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMouseTailEnabled]); // Add dependency
+  }, [isMouseTailEnabled]);
 
   const handleLogin = (username: string) => {
     setUser(username);
@@ -203,7 +216,7 @@ export default function App() {
       read: false
     };
     try {
-      await fetch('/api/messages', {
+      await fetch(`${API_BASE_URL}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMessage)
@@ -216,7 +229,7 @@ export default function App() {
 
   const handleMarkMessagesRead = async () => {
     try {
-      await fetch('/api/messages/mark-read', { method: 'PATCH' });
+      await fetch(`${API_BASE_URL}/messages/mark-read`, { method: 'PATCH' });
       fetchMessages();
     } catch (err) {
       console.error('Failed to mark messages read', err);
@@ -232,42 +245,42 @@ export default function App() {
           aboutData={aboutData || { title: '', image: '', text: '', cards: [] }}
           onUpdateAbout={(data) => {
             setAboutData(data);
-            handleUpdateSection('/api/about', data, fetchAbout);
+            handleUpdateSection('/about', data, fetchAbout);
           }}
           skillsData={skillsData}
           onUpdateSkills={(data) => {
             setSkillsData(data);
-            handleUpdateSection('/api/skills', data, fetchSkills);
+            handleUpdateSection('/skills', data, fetchSkills);
           }}
           projectsData={projectsData || { heading: '', description: '', items: [] }}
           onUpdateProjects={(data) => {
             setProjectsData(data);
-            handleUpdateSection('/api/projects', data, fetchProjects);
+            handleUpdateSection('/projects', data, fetchProjects);
           }}
           heroData={heroData || { title: '', subtitle: '', buttons: [], socials: [] }}
           onUpdateHero={(data) => {
             setHeroData(data);
-            handleUpdateSection('/api/hero', data, fetchHero);
+            handleUpdateSection('/hero', data, fetchHero);
           }}
           settingsData={settingsData || { websiteName: 'Ravi', showLoginButton: true, adminUsername: 'Ravi', adminPassword: 'Ravi123' }}
           onUpdateSettings={(data) => {
             setSettingsData(data);
-            handleUpdateSection('/api/settings', data, fetchSettings);
+            handleUpdateSection('/settings', data, fetchSettings);
           }}
           contactData={contactData || { title: '', subtitle: '', description: '', email: '', phone: '', location: '', namePlaceholder: '', emailPlaceholder: '' }}
           onUpdateContact={(data) => {
             setContactData(data);
-            handleUpdateSection('/api/contact', data, fetchContact);
+            handleUpdateSection('/contact', data, fetchContact);
           }}
           footerData={footerData || { text: '' }}
           onUpdateFooter={(data) => {
             setFooterData(data);
-            handleUpdateSection('/api/footer', data, fetchFooter);
+            handleUpdateSection('/footer', data, fetchFooter);
           }}
           messages={messages}
           onDeleteMessage={async (id) => {
             try {
-              await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+              await fetch(`${API_BASE_URL}/messages/${id}`, { method: 'DELETE' });
               fetchMessages();
             } catch (err) {
               console.error('Failed to delete message', err);
@@ -276,35 +289,35 @@ export default function App() {
           onMarkMessagesRead={handleMarkMessagesRead}
           documentsData={documentsData}
           onUpdateDocuments={async (docs: any) => {
-            // Update local state immediately so AdminPanel inputs feel responsive
             const prevDocs = [...documentsData];
             setDocumentsData(docs);
 
             if (docs.length > prevDocs.length) {
               const newDoc = docs[0];
-              await fetch('/api/documents', {
+              await fetch(`${API_BASE_URL}/documents`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                  id: Date.now().toString(),
                   title: newDoc.title,
                   subtitle: newDoc.subtitle,
                   content: newDoc.content,
+                  date: new Date().toISOString()
                 })
               });
             } else if (docs.length < prevDocs.length) {
               const deletedId = prevDocs.find(d => !docs.find((nd: any) => nd.id === d.id))?.id;
               if (deletedId) {
-                await fetch(`/api/documents/${deletedId}`, { method: 'DELETE' });
+                await fetch(`${API_BASE_URL}/documents/${deletedId}`, { method: 'DELETE' });
               }
             } else {
-              // Find the document that was changed
               const changedDoc = docs.find((d: any, i: number) => {
                 const old = prevDocs.find((od: any) => od.id === d.id);
                 return old && (old.title !== d.title || old.subtitle !== d.subtitle || old.content !== d.content);
               });
 
               if (changedDoc) {
-                await fetch(`/api/documents/${changedDoc.id}`, {
+                await fetch(`${API_BASE_URL}/documents/${changedDoc.id}`, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
@@ -319,15 +332,12 @@ export default function App() {
           }}
         />
         <RoughFilter />
-        {/* ===== ADD THIS LINE ===== */}
         {isMouseTailEnabled && <MouseTail />}
       </div>
     );
   }
 
   if (!settingsData || !heroData || !aboutData || !projectsData || !contactData || !footerData) {
-    // If data is still loading after a short delay, or if we want to ensure it doesn't hang forever
-    // we could render a skeleton or simple defaults. For now, let's just make sure we don't hang if they are null but the server is reachable.
     return (
       <div className="min-h-screen bg-paper dark:bg-slate-950 flex flex-col items-center justify-center font-bold text-2xl hand-font gap-4">
         <div>Loading...</div>
@@ -344,18 +354,13 @@ export default function App() {
   return (
     <div className="min-h-screen relative">
       <RoughFilter />
-
       <SketchBackground />
-
-      {/* ===== ADD THIS LINE ===== */}
       {isMouseTailEnabled && <MouseTail />}
 
-      {/* ===== OPTIONAL: ADD THIS INDICATOR ===== */}
       <div className="fixed bottom-4 left-4 z-50 text-xs text-gray-500 bg-white/80 dark:bg-black/80 px-2 py-1 rounded shadow-md">
         Mouse Trail: {isMouseTailEnabled ? '✓' : '✗'} (Ctrl+M)
       </div>
 
-      {/* Pass showLogin setter to Navbar so the login button can trigger it */}
       <Navbar
         onLoginClick={() => setShowLogin(true)}
         websiteName={settingsData.websiteName}
@@ -380,23 +385,27 @@ export default function App() {
             onSelectDoc={setSelectedDocId}
             onLike={(id) => setDocumentsData(prev => prev.map(d => {
               if (d.id === id) {
-                if (d.userLiked) return d; // Only one like
+                if (d.userLiked) return d;
                 return { ...d, likes: d.likes + 1, userLiked: true };
               }
               return d;
             }))}
             onComment={async (id, comment) => {
               try {
-                // Optimistic update
                 setDocumentsData(prev => prev.map(d => d.id === id ? {
                   ...d,
-                  comments: [...d.comments, { id: 'temp', user: 'Guest', text: comment, date: new Date().toISOString().split('T')[0] }]
+                  comments: [...(d.comments || []), {
+                    id: 'temp',
+                    username: 'Guest',
+                    comment_text: comment,
+                    date: new Date().toISOString()
+                  }]
                 } : d));
 
-                await fetch(`/api/documents/${id}/comments`, {
+                await fetch(`${API_BASE_URL}/documents/${id}/comments`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ user: 'Guest', text: comment })
+                  body: JSON.stringify({ username: 'Guest', comment_text: comment })
                 });
                 fetchDocuments();
               } catch (err) {
