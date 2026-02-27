@@ -67,7 +67,13 @@ app.post('/api/hero', async (req, res) => {
         if (buttons && buttons.length) {
             const { error: buttonsError } = await supabase
                 .from('hero_buttons')
-                .insert(buttons.map(b => ({ ...b, hero_id: '1' })));
+                .insert(buttons.map(b => ({
+                    id: b.id || Date.now().toString() + Math.random(),
+                    hero_id: '1',
+                    label: b.label,
+                    link: b.link,
+                    is_primary: b.primary
+                })));
 
             if (buttonsError) throw buttonsError;
         }
@@ -128,7 +134,12 @@ app.post('/api/about', async (req, res) => {
         if (cards && cards.length) {
             const { error: cardsError } = await supabase
                 .from('about_cards')
-                .insert(cards.map(c => ({ ...c, about_id: '1' })));
+                .insert(cards.map(c => ({
+                    id: c.id || Date.now().toString() + Math.random(),
+                    about_id: '1',
+                    title: c.title,
+                    items: { icon: c.icon, text: c.text }
+                })));
 
             if (cardsError) throw cardsError;
         }
@@ -188,7 +199,9 @@ app.post('/api/skills', async (req, res) => {
                 const { error: skillError } = await supabase
                     .from('skills')
                     .insert(category.skills.map(s => ({
-                        ...s,
+                        id: s.id || Date.now().toString() + Math.random(),
+                        name: s.name,
+                        percentage: parseInt(s.percentage) || 0,
                         category_id: newCategory.id
                     })));
 
@@ -246,7 +259,13 @@ app.post('/api/projects', async (req, res) => {
         if (items && items.length) {
             const { error: projectsError } = await supabase
                 .from('projects')
-                .insert(items);
+                .insert(items.map(item => ({
+                    id: item.id || Date.now().toString() + Math.random(),
+                    title: item.title,
+                    type: item.type,
+                    thumbnail_url: item.thumbnail_url,
+                    link: item.link
+                })));
 
             if (projectsError) throw projectsError;
         }
@@ -325,11 +344,17 @@ app.get('/api/settings', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('settings')
-            .select('*')
-            .limit(1);
+            .select('*');
 
         if (error) throw error;
-        res.json((data && data[0]) || {});
+
+        // Convert key-value rows to a single object
+        const settings = (data || []).reduce((acc, item) => {
+            acc[item.key] = item.value;
+            return acc;
+        }, {});
+
+        res.json(settings);
     } catch (error) {
         console.error('Error fetching settings:', error);
         res.status(500).json({ error: error.message });
@@ -338,12 +363,20 @@ app.get('/api/settings', async (req, res) => {
 
 app.post('/api/settings', async (req, res) => {
     try {
-        // Try upsert with id=1 (integer)
-        const { error } = await supabase
-            .from('settings')
-            .upsert({ id: 1, ...req.body });
+        const settingsData = req.body;
 
-        if (error) throw error;
+        // Upsert each key-value pair as a row
+        const upsertPromises = Object.entries(settingsData).map(([key, value]) => {
+            return supabase
+                .from('settings')
+                .upsert({ key, value });
+        });
+
+        const results = await Promise.all(upsertPromises);
+        const errors = results.filter(r => r.error).map(r => r.error);
+
+        if (errors.length > 0) throw errors[0];
+
         res.json({ success: true });
     } catch (error) {
         console.error('Error updating settings:', error);
