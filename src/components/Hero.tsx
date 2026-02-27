@@ -33,7 +33,7 @@ export const Hero = ({ data }: HeroProps) => {
             className="flex-1 text-center md:text-left"
           >
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 sketch-font whitespace-pre-line">
-              {data.title.includes(',') ? (
+              {data.title?.includes(',') ? (
                 <>
                   {data.title.split(',')[0]},<br />
                   <span className="text-primary sketch-stroke">{data.title.split(',')[1]}</span>
