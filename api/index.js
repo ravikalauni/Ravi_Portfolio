@@ -363,14 +363,15 @@ app.get('/api/documents', async (req, res) => {
 
         const docsWithComments = await Promise.all(
             (documents || []).map(async (doc) => {
-                const { data: comments, error: commentsError } = await supabase
-                    .from('document_comments')
-                    .select('*')
-                    .eq('document_id', doc.id)
-                    .order('date', { ascending: true });
-
-                if (commentsError) throw commentsError;
-                return { ...doc, comments: comments || [] };
+                try {
+                    const { data: comments } = await supabase
+                        .from('document_comments')
+                        .select('*')
+                        .eq('document_id', doc.id);
+                    return { ...doc, comments: comments || [] };
+                } catch (e) {
+                    return { ...doc, comments: [] };
+                }
             })
         );
 
@@ -457,12 +458,18 @@ app.post('/api/documents/:id/comments', async (req, res) => {
 // ==================== MESSAGES ROUTES ====================
 app.get('/api/messages', async (req, res) => {
     try {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('messages')
             .select('*')
             .order('date', { ascending: false });
 
-        if (error) throw error;
+        // If 'date' column doesn't exist, try without ordering
+        if (error) {
+            const fallback = await supabase.from('messages').select('*');
+            if (fallback.error) throw fallback.error;
+            data = fallback.data;
+        }
+
         res.json(data || []);
     } catch (error) {
         console.error('Error fetching messages:', error);
