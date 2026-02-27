@@ -1,3 +1,16 @@
+// Add this at the top of your App component to test the API
+useEffect(() => {
+  const testAPI = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/health`);
+      const data = await res.json();
+      console.log('API Health Check:', data);
+    } catch (err) {
+      console.error('API Health Check Failed:', err);
+    }
+  };
+  testAPI();
+}, []);
 const API_BASE_URL = import.meta.env.PROD
   ? '/api'  // In production, use relative path
   : 'http://localhost:5000/api';
