@@ -12,14 +12,15 @@ import { AdminPanel } from './components/AdminPanel';
 import { RoughFilter } from './components/PencilBox';
 import { MouseTail } from './components/MouseTail';
 
+// ===== ADD THIS CONFIG =====
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState('');
   const [showLogin, setShowLogin] = useState(false);
   const [currentView, setCurrentView] = useState<'portfolio' | 'documents'>('portfolio');
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
-
-  // ===== ADD THIS LINE =====
   const [isMouseTailEnabled, setIsMouseTailEnabled] = useState(true);
 
   const [documentsData, setDocumentsData] = useState<Array<any>>([]);
@@ -32,27 +33,46 @@ export default function App() {
   const [contactData, setContactData] = useState<any>(null);
   const [footerData, setFooterData] = useState<any>(null);
 
+  // ===== ADD THESE HELPER FUNCTIONS =====
+  const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API call failed: ${response.statusText}`);
+    }
+    
+    return response.json();
+  };
+
   // Fetch initial data
   useEffect(() => {
     fetchAllData();
   }, []);
 
   const fetchAllData = async () => {
-    fetchDocuments();
-    fetchMessages();
-    fetchHero();
-    fetchAbout();
-    fetchSkills();
-    fetchProjects();
-    fetchSettings();
-    fetchContact();
-    fetchFooter();
+    await Promise.all([
+      fetchDocuments(),
+      fetchMessages(),
+      fetchHero(),
+      fetchAbout(),
+      fetchSkills(),
+      fetchProjects(),
+      fetchSettings(),
+      fetchContact(),
+      fetchFooter()
+    ]);
   };
 
   const fetchDocuments = async () => {
     try {
-      const res = await fetch('/api/documents');
-      const data = await res.json();
+      const data = await apiFetch('/documents');
       setDocumentsData(data);
     } catch (err) {
       console.error('Failed to fetch documents', err);
@@ -61,8 +81,7 @@ export default function App() {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch('/api/messages');
-      const data = await res.json();
+      const data = await apiFetch('/messages');
       setMessages(data);
     } catch (err) {
       console.error('Failed to fetch messages', err);
@@ -71,8 +90,7 @@ export default function App() {
 
   const fetchHero = async () => {
     try {
-      const res = await fetch('/api/hero');
-      const data = await res.json();
+      const data = await apiFetch('/hero');
       if (data) setHeroData(data);
     } catch (err) {
       console.error('Failed to fetch hero', err);
@@ -81,8 +99,7 @@ export default function App() {
 
   const fetchAbout = async () => {
     try {
-      const res = await fetch('/api/about');
-      const data = await res.json();
+      const data = await apiFetch('/about');
       if (data) setAboutData(data);
     } catch (err) {
       console.error('Failed to fetch about', err);
@@ -91,8 +108,7 @@ export default function App() {
 
   const fetchSkills = async () => {
     try {
-      const res = await fetch('/api/skills');
-      const data = await res.json();
+      const data = await apiFetch('/skills');
       setSkillsData(data);
     } catch (err) {
       console.error('Failed to fetch skills', err);
@@ -101,8 +117,7 @@ export default function App() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch('/api/projects');
-      const data = await res.json();
+      const data = await apiFetch('/projects');
       if (data) setProjectsData(data);
     } catch (err) {
       console.error('Failed to fetch projects', err);
@@ -111,8 +126,7 @@ export default function App() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
-      const data = await res.json();
+      const data = await apiFetch('/settings');
       if (data) setSettingsData(data);
     } catch (err) {
       console.error('Failed to fetch settings', err);
@@ -121,8 +135,7 @@ export default function App() {
 
   const fetchContact = async () => {
     try {
-      const res = await fetch('/api/contact');
-      const data = await res.json();
+      const data = await apiFetch('/contact');
       if (data) setContactData(data);
     } catch (err) {
       console.error('Failed to fetch contact', err);
@@ -131,8 +144,7 @@ export default function App() {
 
   const fetchFooter = async () => {
     try {
-      const res = await fetch('/api/footer');
-      const data = await res.json();
+      const data = await apiFetch('/footer');
       if (data) setFooterData(data);
     } catch (err) {
       console.error('Failed to fetch footer', err);
@@ -141,9 +153,8 @@ export default function App() {
 
   const handleUpdateSection = async (endpoint: string, data: any, refreshFn: () => void) => {
     try {
-      await fetch(endpoint, {
+      await apiFetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
       refreshFn();
@@ -169,7 +180,6 @@ export default function App() {
         setShowLogin(true);
       }
 
-      // ===== ADD THIS KEYBOARD SHORTCUT =====
       // CTRL + M to toggle mouse trail
       if (e.ctrlKey && e.key.toLowerCase() === 'm') {
         e.preventDefault();
@@ -180,7 +190,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMouseTailEnabled]); // Add dependency
+  }, [isMouseTailEnabled]);
 
   const handleLogin = (username: string) => {
     setUser(username);
@@ -195,17 +205,16 @@ export default function App() {
 
   const handleContactSubmit = async (name: string, email: string, message: string) => {
     const newMessage = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
       name,
       email,
       message,
-      date: new Date().toLocaleString(),
+      date: new Date().toISOString(),
       read: false
     };
     try {
-      await fetch('/api/messages', {
+      await apiFetch('/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMessage)
       });
       fetchMessages();
@@ -216,7 +225,7 @@ export default function App() {
 
   const handleMarkMessagesRead = async () => {
     try {
-      await fetch('/api/messages/mark-read', { method: 'PATCH' });
+      await apiFetch('/messages/mark-read', { method: 'PATCH' });
       fetchMessages();
     } catch (err) {
       console.error('Failed to mark messages read', err);
@@ -232,42 +241,42 @@ export default function App() {
           aboutData={aboutData || { title: '', image: '', text: '', cards: [] }}
           onUpdateAbout={(data) => {
             setAboutData(data);
-            handleUpdateSection('/api/about', data, fetchAbout);
+            handleUpdateSection('/about', data, fetchAbout);
           }}
           skillsData={skillsData}
           onUpdateSkills={(data) => {
             setSkillsData(data);
-            handleUpdateSection('/api/skills', data, fetchSkills);
+            handleUpdateSection('/skills', data, fetchSkills);
           }}
           projectsData={projectsData || { heading: '', description: '', items: [] }}
           onUpdateProjects={(data) => {
             setProjectsData(data);
-            handleUpdateSection('/api/projects', data, fetchProjects);
+            handleUpdateSection('/projects', data, fetchProjects);
           }}
           heroData={heroData || { title: '', subtitle: '', buttons: [], socials: [] }}
           onUpdateHero={(data) => {
             setHeroData(data);
-            handleUpdateSection('/api/hero', data, fetchHero);
+            handleUpdateSection('/hero', data, fetchHero);
           }}
           settingsData={settingsData || { websiteName: 'Ravi', showLoginButton: true, adminUsername: 'Ravi', adminPassword: 'Ravi123' }}
           onUpdateSettings={(data) => {
             setSettingsData(data);
-            handleUpdateSection('/api/settings', data, fetchSettings);
+            handleUpdateSection('/settings', data, fetchSettings);
           }}
           contactData={contactData || { title: '', subtitle: '', description: '', email: '', phone: '', location: '', namePlaceholder: '', emailPlaceholder: '' }}
           onUpdateContact={(data) => {
             setContactData(data);
-            handleUpdateSection('/api/contact', data, fetchContact);
+            handleUpdateSection('/contact', data, fetchContact);
           }}
           footerData={footerData || { text: '' }}
           onUpdateFooter={(data) => {
             setFooterData(data);
-            handleUpdateSection('/api/footer', data, fetchFooter);
+            handleUpdateSection('/footer', data, fetchFooter);
           }}
           messages={messages}
           onDeleteMessage={async (id) => {
             try {
-              await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+              await apiFetch(`/messages/${id}`, { method: 'DELETE' });
               fetchMessages();
             } catch (err) {
               console.error('Failed to delete message', err);
@@ -282,19 +291,20 @@ export default function App() {
 
             if (docs.length > prevDocs.length) {
               const newDoc = docs[0];
-              await fetch('/api/documents', {
+              await apiFetch('/documents', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                  id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
                   title: newDoc.title,
                   subtitle: newDoc.subtitle,
                   content: newDoc.content,
+                  date: new Date().toISOString()
                 })
               });
             } else if (docs.length < prevDocs.length) {
               const deletedId = prevDocs.find(d => !docs.find((nd: any) => nd.id === d.id))?.id;
               if (deletedId) {
-                await fetch(`/api/documents/${deletedId}`, { method: 'DELETE' });
+                await apiFetch(`/documents/${deletedId}`, { method: 'DELETE' });
               }
             } else {
               // Find the document that was changed
@@ -304,9 +314,8 @@ export default function App() {
               });
 
               if (changedDoc) {
-                await fetch(`/api/documents/${changedDoc.id}`, {
+                await apiFetch(`/documents/${changedDoc.id}`, {
                   method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     title: changedDoc.title,
                     subtitle: changedDoc.subtitle,
@@ -319,15 +328,12 @@ export default function App() {
           }}
         />
         <RoughFilter />
-        {/* ===== ADD THIS LINE ===== */}
         {isMouseTailEnabled && <MouseTail />}
       </div>
     );
   }
 
   if (!settingsData || !heroData || !aboutData || !projectsData || !contactData || !footerData) {
-    // If data is still loading after a short delay, or if we want to ensure it doesn't hang forever
-    // we could render a skeleton or simple defaults. For now, let's just make sure we don't hang if they are null but the server is reachable.
     return (
       <div className="min-h-screen bg-paper dark:bg-slate-950 flex flex-col items-center justify-center font-bold text-2xl hand-font gap-4">
         <div>Loading...</div>
@@ -344,18 +350,13 @@ export default function App() {
   return (
     <div className="min-h-screen relative">
       <RoughFilter />
-
       <SketchBackground />
-
-      {/* ===== ADD THIS LINE ===== */}
       {isMouseTailEnabled && <MouseTail />}
 
-      {/* ===== OPTIONAL: ADD THIS INDICATOR ===== */}
       <div className="fixed bottom-4 left-4 z-50 text-xs text-gray-500 bg-white/80 dark:bg-black/80 px-2 py-1 rounded shadow-md">
         Mouse Trail: {isMouseTailEnabled ? '✓' : '✗'} (Ctrl+M)
       </div>
 
-      {/* Pass showLogin setter to Navbar so the login button can trigger it */}
       <Navbar
         onLoginClick={() => setShowLogin(true)}
         websiteName={settingsData.websiteName}
@@ -380,7 +381,7 @@ export default function App() {
             onSelectDoc={setSelectedDocId}
             onLike={(id) => setDocumentsData(prev => prev.map(d => {
               if (d.id === id) {
-                if (d.userLiked) return d; // Only one like
+                if (d.userLiked) return d;
                 return { ...d, likes: d.likes + 1, userLiked: true };
               }
               return d;
@@ -390,13 +391,17 @@ export default function App() {
                 // Optimistic update
                 setDocumentsData(prev => prev.map(d => d.id === id ? {
                   ...d,
-                  comments: [...d.comments, { id: 'temp', user: 'Guest', text: comment, date: new Date().toISOString().split('T')[0] }]
+                  comments: [...(d.comments || []), { 
+                    id: 'temp', 
+                    username: 'Guest', 
+                    comment_text: comment, 
+                    date: new Date().toISOString() 
+                  }]
                 } : d));
 
-                await fetch(`/api/documents/${id}/comments`, {
+                await apiFetch(`/documents/${id}/comments`, {
                   method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ user: 'Guest', text: comment })
+                  body: JSON.stringify({ username: 'Guest', comment_text: comment })
                 });
                 fetchDocuments();
               } catch (err) {
