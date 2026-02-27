@@ -326,11 +326,10 @@ app.get('/api/settings', async (req, res) => {
         const { data, error } = await supabase
             .from('settings')
             .select('*')
-            .eq('id', '1')
-            .single();
+            .limit(1);
 
-        if (error && error.code !== 'PGRST116') throw error;
-        res.json(data || {});
+        if (error) throw error;
+        res.json((data && data[0]) || {});
     } catch (error) {
         console.error('Error fetching settings:', error);
         res.status(500).json({ error: error.message });
@@ -339,9 +338,10 @@ app.get('/api/settings', async (req, res) => {
 
 app.post('/api/settings', async (req, res) => {
     try {
+        // Try upsert with id=1 (integer)
         const { error } = await supabase
             .from('settings')
-            .upsert({ id: '1', ...req.body });
+            .upsert({ id: 1, ...req.body });
 
         if (error) throw error;
         res.json({ success: true });
