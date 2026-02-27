@@ -53,43 +53,67 @@ app.get('/api/hero', async (req, res) => {
 
 app.post('/api/hero', async (req, res) => {
     try {
+        console.log('Update Hero Request:', JSON.stringify(req.body));
         const { title, subtitle, buttons, socials } = req.body;
 
         const { error: heroError } = await supabase
             .from('hero_section')
             .upsert({ id: '1', title, subtitle });
 
-        if (heroError) throw heroError;
-
-        await supabase.from('hero_buttons').delete().eq('hero_id', '1');
-        await supabase.from('hero_socials').delete().eq('hero_id', '1');
-
-        if (buttons && buttons.length) {
-            const { error: buttonsError } = await supabase
-                .from('hero_buttons')
-                .insert(buttons.map(b => ({
-                    id: b.id || Date.now().toString() + Math.random(),
-                    hero_id: '1',
-                    label: b.label,
-                    link: b.link,
-                    is_primary: b.primary
-                })));
-
-            if (buttonsError) throw buttonsError;
+        if (heroError) {
+            console.error('Hero section upsert error:', heroError);
+            throw heroError;
         }
 
-        if (socials && socials.length) {
+        const { error: delButtonsError } = await supabase.from('hero_buttons').delete().eq('hero_id', '1');
+        if (delButtonsError) {
+            console.error('Delete hero buttons error:', delButtonsError);
+            throw delButtonsError;
+        }
+        
+        const { error: delSocialsError } = await supabase.from('hero_socials').delete().eq('hero_id', '1');
+        if (delSocialsError) {
+            console.error('Delete hero socials error:', delSocialsError);
+            throw delSocialsError;
+        }
+
+        if (buttons && Array.isArray(buttons) && buttons.length) {
+            const { error: buttonsError } = await supabase
+                .from('hero_buttons')
+                .insert(buttons.map(b => ({ 
+                    id: b.id?.toString() || (Date.now() + Math.random()).toString(),
+                    hero_id: '1', 
+                    label: b.label || '', 
+                    link: b.link || '', 
+                    is_primary: !!(b.primary || b.is_primary)
+                })));
+
+            if (buttonsError) {
+                console.error('Insert hero buttons error:', buttonsError);
+                throw buttonsError;
+            }
+        }
+
+        if (socials && Array.isArray(socials) && socials.length) {
             const { error: socialsError } = await supabase
                 .from('hero_socials')
-                .insert(socials.map(s => ({ ...s, hero_id: '1' })));
+                .insert(socials.map(s => ({ 
+                    id: s.id?.toString() || (Date.now() + Math.random()).toString(),
+                    hero_id: '1',
+                    platform: s.platform || '',
+                    link: s.link || ''
+                })));
 
-            if (socialsError) throw socialsError;
+            if (socialsError) {
+                console.error('Insert hero socials error:', socialsError);
+                throw socialsError;
+            }
         }
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Error updating hero:', error);
-        res.status(500).json({ error: error.message });
+        console.error('Final Error updating hero:', error);
+        res.status(500).json({ error: error.message || 'Unknown error occurred' });
     }
 });
 
