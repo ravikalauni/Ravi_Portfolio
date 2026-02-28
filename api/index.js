@@ -27,6 +27,28 @@ const supabase = createClient(supabaseUrl || '', supabaseKey || '');
 // Favicon handler to silence 404 errors
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
+// ==================== DEBUG ROUTE ====================
+app.get('/api/debug', async (req, res) => {
+    try {
+        const results = {};
+
+        // 1. Check Env
+        results.env = {
+            hasUrl: !!process.env.SUPABASE_URL,
+            hasKey: !!process.env.SUPABASE_KEY,
+            urlPrefix: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.substring(0, 10) + '...' : 'NONE'
+        };
+
+        // 2. Test Connection
+        const { data, error } = await supabase.from('hero_section').select('count', { count: 'exact', head: true });
+        results.connection = error ? { status: 'ERROR', error } : { status: 'OK', count: data };
+
+        res.json(results);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ==================== HERO SECTION ROUTES ====================
 app.get('/api/hero', async (req, res) => {
     try {
@@ -43,19 +65,32 @@ app.get('/api/hero', async (req, res) => {
             .select('*')
             .eq('hero_id', '1');
 
+        if (buttonsError) throw buttonsError;
+
         const { data: socials, error: socialsError } = await supabase
             .from('hero_socials')
             .select('*')
             .eq('hero_id', '1');
 
+        if (socialsError) throw socialsError;
+
         res.json({
             ...hero,
-            buttons: buttons || [],
+            buttons: (buttons || []).map(b => ({
+                id: b.id,
+                label: b.label,
+                link: b.link,
+                primary: !!b.is_primary
+            })),
             socials: socials || []
         });
     } catch (error) {
         console.error('Error fetching hero:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: error.message,
+            details: error.details,
+            hint: error.hint
+        });
     }
 });
 
@@ -167,7 +202,7 @@ app.post('/api/about', async (req, res) => {
                 .insert(cards.map(c => ({
                     about_id: '1',
                     title: c.title,
-                    items: { icon: c.icon, text: c.text }
+                    items: c.items // c.items is already an array of strings from frontend
                 })));
 
             if (cardsError) throw cardsError;
@@ -264,7 +299,13 @@ app.get('/api/projects', async (req, res) => {
 
         res.json({
             ...section,
-            items: projects || []
+            items: (projects || []).map(p => ({
+                id: String(p.id),
+                title: p.title,
+                type: p.type,
+                thumbnail: p.thumbnail_url,
+                link: p.link
+            }))
         });
     } catch (error) {
         console.error('Error fetching projects:', error);
@@ -371,43 +412,59 @@ app.get('/api/settings', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('settings')
-            .select('*');
+            .select('*')
+            .eq('id', '1')
+            .single();
 
-        if (error) throw error;
+        if (error && error.code !== 'PGRST116') throw error;
 
-        // Convert key-value rows to a single object
-        const settings = (data || []).reduce((acc, item) => {
-            acc[item.key] = item.value;
-            return acc;
-        }, {});
+        if (!data) {
+            return res.json({
+                websiteName: 'Portfolio',
+                showLoginButton: true,
+                adminUsername: 'admin',
+                adminPassword: 'password'
+            });
+        }
 
-        res.json(settings);
+        res.json({
+            websiteName: data.website_name,
+            showLoginButton: !!data.show_login_button,
+            adminUsername: data.admin_username,
+            adminPassword: data.admin_password
+        });
     } catch (error) {
         console.error('Error fetching settings:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: error.message,
+            details: error.details,
+            hint: error.hint
+        });
     }
 });
 
 app.post('/api/settings', async (req, res) => {
     try {
-        const settingsData = req.body;
+        const s = req.body;
+        const { error } = await supabase
+            .from('settings')
+            .upsert({
+                id: '1',
+                website_name: s.websiteName,
+                show_login_button: !!s.showLoginButton,
+                admin_username: s.adminUsername,
+                admin_password: s.adminPassword
+            });
 
-        // Upsert each key-value pair as a row
-        const upsertPromises = Object.entries(settingsData).map(([key, value]) => {
-            return supabase
-                .from('settings')
-                .upsert({ key, value });
-        });
-
-        const results = await Promise.all(upsertPromises);
-        const errors = results.filter(r => r.error).map(r => r.error);
-
-        if (errors.length > 0) throw errors[0];
-
+        if (error) throw error;
         res.json({ success: true });
     } catch (error) {
         console.error('Error updating settings:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: error.message,
+            details: error.details,
+            hint: error.hint
+        });
     }
 });
 
@@ -417,7 +474,7 @@ app.get('/api/documents', async (req, res) => {
         const { data: documents, error: docsError } = await supabase
             .from('documents')
             .select('*')
-            .order('date', { ascending: false });
+            .order('created_at', { ascending: false });
 
         if (docsError) throw docsError;
 
@@ -429,9 +486,28 @@ app.get('/api/documents', async (req, res) => {
                         .select('*')
                         .eq('document_id', doc.id)
                         .order('created_at', { ascending: true });
-                    return { ...doc, comments: comments || [] };
+                    return {
+                        id: String(doc.id),
+                        title: doc.title,
+                        subtitle: doc.subtitle,
+                        content: doc.content,
+                        likes: doc.likes,
+                        shares: doc.shares,
+                        date: doc.created_at,
+                        comments: (comments || []).map(c => ({
+                            id: String(c.id),
+                            user: c.user_name,
+                            text: c.comment_text,
+                            date: c.created_at
+                        }))
+                    };
                 } catch (e) {
-                    return { ...doc, comments: [] };
+                    return {
+                        ...doc,
+                        id: String(doc.id),
+                        date: doc.created_at,
+                        comments: []
+                    };
                 }
             })
         );
@@ -439,17 +515,21 @@ app.get('/api/documents', async (req, res) => {
         res.json(docsWithComments);
     } catch (error) {
         console.error('Error fetching documents:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: error.message,
+            details: error.details,
+            hint: error.hint
+        });
     }
 });
 
 app.post('/api/documents', async (req, res) => {
     try {
-        const { id, title, subtitle, content, date } = req.body;
+        const { title, subtitle, content } = req.body;
 
         const { error } = await supabase
             .from('documents')
-            .insert([{ title, subtitle, content, date, likes: 0, shares: 0 }]);
+            .insert([{ title, subtitle, content, likes: 0, shares: 0 }]);
 
         if (error) throw error;
         res.status(201).json({ success: true });
@@ -518,32 +598,38 @@ app.post('/api/documents/:id/comments', async (req, res) => {
 // ==================== MESSAGES ROUTES ====================
 app.get('/api/messages', async (req, res) => {
     try {
-        let { data, error } = await supabase
+        const { data, error } = await supabase
             .from('messages')
             .select('*')
-            .order('date', { ascending: false });
+            .order('created_at', { ascending: false });
 
-        // If 'date' column doesn't exist, try without ordering
-        if (error) {
-            const fallback = await supabase.from('messages').select('*');
-            if (fallback.error) throw fallback.error;
-            data = fallback.data;
-        }
+        if (error) throw error;
 
-        res.json(data || []);
+        res.json((data || []).map(m => ({
+            id: String(m.id),
+            name: m.name,
+            email: m.email,
+            message: m.message,
+            date: m.created_at,
+            read: !!m.is_read
+        })));
     } catch (error) {
         console.error('Error fetching messages:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: error.message,
+            details: error.details,
+            hint: error.hint
+        });
     }
 });
 
 app.post('/api/messages', async (req, res) => {
     try {
-        const { id, name, email, message } = req.body;
+        const { name, email, message } = req.body;
 
         const { error } = await supabase
             .from('messages')
-            .insert([{ name, email, message, read: false }]);
+            .insert([{ name, email, message, is_read: false }]);
 
         if (error) throw error;
         res.status(201).json({ success: true });
@@ -557,8 +643,8 @@ app.patch('/api/messages/mark-read', async (req, res) => {
     try {
         const { error } = await supabase
             .from('messages')
-            .update({ read: true })
-            .eq('read', false);
+            .update({ is_read: true })
+            .eq('is_read', false);
 
         if (error) throw error;
         res.json({ success: true });
