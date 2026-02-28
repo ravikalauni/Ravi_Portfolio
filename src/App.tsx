@@ -127,6 +127,8 @@ export default function App() {
       if (data) setSettingsData(data);
     } catch (err) {
       console.error('Failed to fetch settings', err);
+      // Fallback to defaults so app doesn't stay blank
+      setSettingsData({ websiteName: 'Portfolio', showLoginButton: true, adminUsername: 'admin', adminPassword: 'password' });
     }
   };
 
