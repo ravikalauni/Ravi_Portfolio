@@ -17,7 +17,15 @@ app.use(express.json());
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error('CRITICAL: SUPABASE_URL or SUPABASE_KEY is missing from environment variables.');
+}
+
+const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+
+// Favicon handler to silence 404 errors
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // ==================== HERO SECTION ROUTES ====================
 app.get('/api/hero', async (req, res) => {
@@ -70,7 +78,7 @@ app.post('/api/hero', async (req, res) => {
             console.error('Delete hero buttons error:', delButtonsError);
             throw delButtonsError;
         }
-        
+
         const { error: delSocialsError } = await supabase.from('hero_socials').delete().eq('hero_id', '1');
         if (delSocialsError) {
             console.error('Delete hero socials error:', delSocialsError);
@@ -80,11 +88,10 @@ app.post('/api/hero', async (req, res) => {
         if (buttons && Array.isArray(buttons) && buttons.length) {
             const { error: buttonsError } = await supabase
                 .from('hero_buttons')
-                .insert(buttons.map(b => ({ 
-                    id: b.id?.toString() || (Date.now() + Math.random()).toString(),
-                    hero_id: '1', 
-                    label: b.label || '', 
-                    link: b.link || '', 
+                .insert(buttons.map(b => ({
+                    hero_id: '1',
+                    label: b.label || '',
+                    link: b.link || '',
                     is_primary: !!(b.primary || b.is_primary)
                 })));
 
@@ -97,8 +104,7 @@ app.post('/api/hero', async (req, res) => {
         if (socials && Array.isArray(socials) && socials.length) {
             const { error: socialsError } = await supabase
                 .from('hero_socials')
-                .insert(socials.map(s => ({ 
-                    id: s.id?.toString() || (Date.now() + Math.random()).toString(),
+                .insert(socials.map(s => ({
                     hero_id: '1',
                     platform: s.platform || '',
                     link: s.link || ''
@@ -159,7 +165,6 @@ app.post('/api/about', async (req, res) => {
             const { error: cardsError } = await supabase
                 .from('about_cards')
                 .insert(cards.map(c => ({
-                    id: c.id || Date.now().toString() + Math.random(),
                     about_id: '1',
                     title: c.title,
                     items: { icon: c.icon, text: c.text }
@@ -223,7 +228,6 @@ app.post('/api/skills', async (req, res) => {
                 const { error: skillError } = await supabase
                     .from('skills')
                     .insert(category.skills.map(s => ({
-                        id: s.id || Date.now().toString() + Math.random(),
                         name: s.name,
                         percentage: parseInt(s.percentage) || 0,
                         category_id: newCategory.id
@@ -284,10 +288,9 @@ app.post('/api/projects', async (req, res) => {
             const { error: projectsError } = await supabase
                 .from('projects')
                 .insert(items.map(item => ({
-                    id: item.id || Date.now().toString() + Math.random(),
                     title: item.title,
                     type: item.type,
-                    thumbnail_url: item.thumbnail_url,
+                    thumbnail_url: item.thumbnail_url || item.thumbnail,
                     link: item.link
                 })));
 
@@ -446,7 +449,7 @@ app.post('/api/documents', async (req, res) => {
 
         const { error } = await supabase
             .from('documents')
-            .insert([{ id, title, subtitle, content, date, likes: 0, shares: 0 }]);
+            .insert([{ title, subtitle, content, date, likes: 0, shares: 0 }]);
 
         if (error) throw error;
         res.status(201).json({ success: true });
@@ -499,7 +502,6 @@ app.post('/api/documents/:id/comments', async (req, res) => {
         const { error } = await supabase
             .from('document_comments')
             .insert([{
-                id: Date.now().toString(),
                 document_id: id,
                 user_name: username,
                 comment_text: comment_text
@@ -541,7 +543,7 @@ app.post('/api/messages', async (req, res) => {
 
         const { error } = await supabase
             .from('messages')
-            .insert([{ id, name, email, message, read: false }]);
+            .insert([{ name, email, message, read: false }]);
 
         if (error) throw error;
         res.status(201).json({ success: true });
