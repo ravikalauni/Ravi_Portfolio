@@ -55,7 +55,7 @@ app.get('/api/hero', async (req, res) => {
         const { data: hero, error: heroError } = await supabase
             .from('hero_section')
             .select('*')
-            .eq('id', '1')
+            .eq('id', 1)
             .single();
 
         if (heroError && heroError.code !== 'PGRST116') throw heroError;
@@ -63,14 +63,14 @@ app.get('/api/hero', async (req, res) => {
         const { data: buttons, error: buttonsError } = await supabase
             .from('hero_buttons')
             .select('*')
-            .eq('hero_id', '1');
+            .eq('hero_id', 1);
 
         if (buttonsError) throw buttonsError;
 
         const { data: socials, error: socialsError } = await supabase
             .from('hero_socials')
             .select('*')
-            .eq('hero_id', '1');
+            .eq('hero_id', 1);
 
         if (socialsError) throw socialsError;
 
@@ -101,20 +101,20 @@ app.post('/api/hero', async (req, res) => {
 
         const { error: heroError } = await supabase
             .from('hero_section')
-            .upsert({ id: '1', title, subtitle });
+            .upsert({ id: 1, title, subtitle });
 
         if (heroError) {
             console.error('Hero section upsert error:', heroError);
             throw heroError;
         }
 
-        const { error: delButtonsError } = await supabase.from('hero_buttons').delete().eq('hero_id', '1');
+        const { error: delButtonsError } = await supabase.from('hero_buttons').delete().eq('hero_id', 1);
         if (delButtonsError) {
             console.error('Delete hero buttons error:', delButtonsError);
             throw delButtonsError;
         }
 
-        const { error: delSocialsError } = await supabase.from('hero_socials').delete().eq('hero_id', '1');
+        const { error: delSocialsError } = await supabase.from('hero_socials').delete().eq('hero_id', 1);
         if (delSocialsError) {
             console.error('Delete hero socials error:', delSocialsError);
             throw delSocialsError;
@@ -124,7 +124,7 @@ app.post('/api/hero', async (req, res) => {
             const { error: buttonsError } = await supabase
                 .from('hero_buttons')
                 .insert(buttons.map(b => ({
-                    hero_id: '1',
+                    hero_id: 1,
                     label: b.label || '',
                     link: b.link || '',
                     is_primary: !!(b.primary || b.is_primary)
@@ -140,7 +140,7 @@ app.post('/api/hero', async (req, res) => {
             const { error: socialsError } = await supabase
                 .from('hero_socials')
                 .insert(socials.map(s => ({
-                    hero_id: '1',
+                    hero_id: 1,
                     platform: s.platform || '',
                     link: s.link || ''
                 })));
@@ -164,7 +164,7 @@ app.get('/api/about', async (req, res) => {
         const { data: about, error: aboutError } = await supabase
             .from('about_section')
             .select('*')
-            .eq('id', '1')
+            .eq('id', 1)
             .single();
 
         if (aboutError && aboutError.code !== 'PGRST116') throw aboutError;
@@ -172,7 +172,7 @@ app.get('/api/about', async (req, res) => {
         const { data: cards, error: cardsError } = await supabase
             .from('about_cards')
             .select('*')
-            .eq('about_id', '1');
+            .eq('about_id', 1);
 
         res.json({
             ...about,
@@ -190,17 +190,17 @@ app.post('/api/about', async (req, res) => {
 
         const { error: aboutError } = await supabase
             .from('about_section')
-            .upsert({ id: '1', title, image_url, text });
+            .upsert({ id: 1, title, image_url, text });
 
         if (aboutError) throw aboutError;
 
-        await supabase.from('about_cards').delete().eq('about_id', '1');
+        await supabase.from('about_cards').delete().eq('about_id', 1);
 
         if (cards && cards.length) {
             const { error: cardsError } = await supabase
                 .from('about_cards')
                 .insert(cards.map(c => ({
-                    about_id: '1',
+                    about_id: 1,
                     title: c.title,
                     items: c.items // c.items is already an array of strings from frontend
                 })));
@@ -247,8 +247,8 @@ app.post('/api/skills', async (req, res) => {
     try {
         const categories = req.body;
 
-        await supabase.from('skills').delete().neq('id', '0');
-        await supabase.from('skill_categories').delete().neq('id', '0');
+        await supabase.from('skills').delete().neq('id', 0);
+        await supabase.from('skill_categories').delete().neq('id', 0);
 
         for (const category of categories) {
             const { data: newCategory, error: catError } = await supabase
@@ -285,7 +285,7 @@ app.get('/api/projects', async (req, res) => {
         const { data: section, error: sectionError } = await supabase
             .from('projects_section')
             .select('*')
-            .eq('id', '1')
+            .eq('id', 1)
             .single();
 
         if (sectionError && sectionError.code !== 'PGRST116') throw sectionError;
@@ -319,11 +319,11 @@ app.post('/api/projects', async (req, res) => {
 
         const { error: sectionError } = await supabase
             .from('projects_section')
-            .upsert({ id: '1', heading, description });
+            .upsert({ id: 1, heading, description });
 
         if (sectionError) throw sectionError;
 
-        await supabase.from('projects').delete().neq('id', '0');
+        await supabase.from('projects').delete().neq('id', 0);
 
         if (items && items.length) {
             const { error: projectsError } = await supabase
@@ -351,7 +351,7 @@ app.get('/api/contact', async (req, res) => {
         const { data, error } = await supabase
             .from('contact_section')
             .select('*')
-            .eq('id', '1')
+            .eq('id', 1)
             .single();
 
         if (error && error.code !== 'PGRST116') throw error;
@@ -366,7 +366,7 @@ app.post('/api/contact', async (req, res) => {
     try {
         const { error } = await supabase
             .from('contact_section')
-            .upsert({ id: '1', ...req.body });
+            .upsert({ id: 1, ...req.body });
 
         if (error) throw error;
         res.json({ success: true });
@@ -382,7 +382,7 @@ app.get('/api/footer', async (req, res) => {
         const { data, error } = await supabase
             .from('footer_section')
             .select('*')
-            .eq('id', '1')
+            .eq('id', 1)
             .single();
 
         if (error && error.code !== 'PGRST116') throw error;
@@ -397,7 +397,7 @@ app.post('/api/footer', async (req, res) => {
     try {
         const { error } = await supabase
             .from('footer_section')
-            .upsert({ id: '1', ...req.body });
+            .upsert({ id: 1, ...req.body });
 
         if (error) throw error;
         res.json({ success: true });
@@ -413,7 +413,7 @@ app.get('/api/settings', async (req, res) => {
         const { data, error } = await supabase
             .from('settings')
             .select('*')
-            .eq('id', '1')
+            .eq('id', 1)
             .single();
 
         if (error && error.code !== 'PGRST116') throw error;
@@ -449,7 +449,7 @@ app.post('/api/settings', async (req, res) => {
         const { error } = await supabase
             .from('settings')
             .upsert({
-                id: '1',
+                id: 1,
                 website_name: s.websiteName,
                 show_login_button: !!s.showLoginButton,
                 admin_username: s.adminUsername,
