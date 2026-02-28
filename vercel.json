@@ -15,12 +15,16 @@
     ],
     "routes": [
         {
+            "src": "/favicon.ico",
+            "dest": "/favicon.svg"
+        },
+        {
             "src": "/api/(.*)",
             "dest": "/api/index.js"
         },
         {
             "src": "/(.*)",
-            "dest": "/$1"
+            "dest": "/index.html"
         }
     ]
 }
